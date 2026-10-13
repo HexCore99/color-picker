@@ -4,6 +4,8 @@
 
 - `#[cfg(test)]` the `#[...]` is `attribute syntax`. it gives extra information to the compiler about the item immediately after it.
 - `#[cfg(test)]` cfg means `configuration condition` it tells rust to include an item when condition is true. in this case `test`
+- `let value = pixel.0;` this weird shit is possible , because pixel is holding a `tuple struct`
+- `tuple struct` a struct without variable names, just the types. e.g `pub struct Point(i32,i32)`
 
 ## GPUI stuffss
 
@@ -68,3 +70,15 @@ impl Render for Picker {
 - `cx.listener(...)` wraps our closure so it can access the `Picker` view's state. It is created while `render` builds the UI; the closure itself runs later, when the click happens.
 - `picker` borrows the `Picker` mutably.
 - `event` `window` `cx` is passed by `the on_click()`. And i dont know what i can do with these right now.
+
+## Windows Stuffs
+
+- `let dc = unsafe{GetDC(None)};` dc holds the entire screen as a reference
+
+```rust
+    let pixel = unsafe {
+        GetPixel(dc, x, y);
+    };
+```
+
+- get the pixel from mouse positioin (x,y) from the screen which reference is held by `dc`,

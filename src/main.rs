@@ -66,9 +66,9 @@ impl Render for Picker {
 }
 
 fn main() {
-    match windows_sampling::cursor_position() {
-        Ok((x, y)) => println!("Cursor position: ({x}, {y})"),
-        Err(error) => println!("Could not read teh cursor position: {error}"),
+    match windows_sampling::sample_cursor_color() {
+        Ok(color) => println!("Sample color: {}", color.to_hex()),
+        Err(error) => println!("Sampling failed: {error}"),
     }
 
     Application::new().run(|cx: &mut App| {
