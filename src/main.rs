@@ -11,12 +11,42 @@ struct Picker {
 }
 
 impl Render for Picker {
-    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        let preview_color = (u32::from(self.color.r) << 16)
+            | (u32::from(self.color.g) << 8)
+            | (u32::from(self.color.b));
+
         div()
             .size_full()
+            .flex()
+            .flex_col()
+            .items_start()
+            .gap_3()
+            .p_4()
             .bg(rgb(0x202020))
             .text_color(rgb(0xffffff))
+            .child(
+                div()
+                    .w(px(64.0))
+                    .h(px(64.0))
+                    .rounded_md()
+                    .bg(rgb(preview_color)),
+            )
             .child(format!("{} | {}", self.color.to_hex(), self.color.to_rgb(),))
+            .child(
+                div()
+                    .id("change-color")
+                    .px_3()
+                    .py_2()
+                    .rounded_md()
+                    .bg(rgb(0x404040))
+                    .cursor_pointer()
+                    .child("Change color")
+                    .on_click(cx.listener(|picker, _event, _window, cx| {
+                        picker.color = Rgb { r: 0, g: 0, b: 255 };
+                        cx.notify();
+                    })),
+            )
     }
 }
 

@@ -53,3 +53,18 @@ impl Render for Picker {
 - `Bounds::centered(....)` sets the window in center with given sizes.
 - `..Default::default()` fills the other `WindowOptions` with the default values.
 - `|_, cx| cx.new(|_| Picker),` tells what to show in the window.
+
+##
+
+```rust
+
+                    .on_click(cx.listener(|picker, _event, _window, cx| {
+                        picker.color = Rgb { r: 0, g: 0, b: 255 };
+                        cx.notify();
+                    })),
+```
+
+- `.on_click(...)` registers a callback on this `Div`. GPUI runs the callback when the `Div` receives a click.
+- `cx.listener(...)` wraps our closure so it can access the `Picker` view's state. It is created while `render` builds the UI; the closure itself runs later, when the click happens.
+- `picker` borrows the `Picker` mutably.
+- `event` `window` `cx` is passed by `the on_click()`. And i dont know what i can do with these right now.

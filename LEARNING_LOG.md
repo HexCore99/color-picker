@@ -15,5 +15,7 @@
 
 ## GPUI interaction
 
-- **Next:** Add a click control using `cx.listener` and `cx.notify()`.
+- **Added:** Click control changes the stored color to blue and requests a redraw; manual result pending.
+- **Added:** Preview square derives its background from stored RGB channels; manual result pending.
+- **Next:** Add a control to copy the current HEX value to the clipboard.
 - **Workflow:** Code and explanations in chat; developer edits source files.
