@@ -4,6 +4,7 @@ use gpui::{
 };
 
 mod color;
+mod windows_sampling;
 use color::Rgb;
 
 struct Picker {
@@ -65,6 +66,11 @@ impl Render for Picker {
 }
 
 fn main() {
+    match windows_sampling::cursor_position() {
+        Ok((x, y)) => println!("Cursor position: ({x}, {y})"),
+        Err(error) => println!("Could not read teh cursor position: {error}"),
+    }
+
     Application::new().run(|cx: &mut App| {
         let bounds = Bounds::centered(None, size(px(360.0), px(240.0)), cx);
 

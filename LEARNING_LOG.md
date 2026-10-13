@@ -18,3 +18,8 @@
 - **Verified:** Click changes the color, preview, and displayed values to blue (user screenshots).
 - **Verified:** Copy HEX writes the current color; clipboard contains `#FF8000` and `#0000FF` (user screenshots).
 - **Workflow:** Code and explanations in chat; developer edits source files.
+
+## Windows sampling
+
+- **Verified:** `GetCursorPos` returned `(1034, 29)` during `cargo run` (user output).
+- **Next:** Read that desktop pixel with `GetDC` / `GetPixel`, release the DC, and convert to `Rgb`.
