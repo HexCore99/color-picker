@@ -1,6 +1,6 @@
 use gpui::{
-    App, Application, Bounds, Context, Window, WindowBounds, WindowOptions, div, prelude::*, px,
-    rgb, size,
+    App, Application, Bounds, ClipboardItem, Context, Window, WindowBounds, WindowOptions, div,
+    prelude::*, px, rgb, size,
 };
 
 mod color;
@@ -45,6 +45,20 @@ impl Render for Picker {
                     .on_click(cx.listener(|picker, _event, _window, cx| {
                         picker.color = Rgb { r: 0, g: 0, b: 255 };
                         cx.notify();
+                    })),
+            )
+            .child(
+                div()
+                    .id("Copy-text")
+                    .px_3()
+                    .py_2()
+                    .rounded_md()
+                    .bg(rgb(0x404040))
+                    .cursor_pointer()
+                    .child("Copy HEX")
+                    .on_click(cx.listener(|picker, _event, _window, cx| {
+                        let text = picker.color.to_hex();
+                        cx.write_to_clipboard(ClipboardItem::new_string(text));
                     })),
             )
     }

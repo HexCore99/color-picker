@@ -15,7 +15,6 @@
 
 ## GPUI interaction
 
-- **Added:** Click control changes the stored color to blue and requests a redraw; manual result pending.
-- **Added:** Preview square derives its background from stored RGB channels; manual result pending.
-- **Next:** Add a control to copy the current HEX value to the clipboard.
+- **Verified:** Click changes the color, preview, and displayed values to blue (user screenshots).
+- **Verified:** Copy HEX writes the current color; clipboard contains `#FF8000` and `#0000FF` (user screenshots).
 - **Workflow:** Code and explanations in chat; developer edits source files.
