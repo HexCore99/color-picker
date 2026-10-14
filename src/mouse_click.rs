@@ -11,6 +11,11 @@ unsafe extern "system" fn mouse_hook(code: i32, wparam: WPARAM, lparam: LPARAM) 
 
         let point = unsafe { (*event).pt };
         let sample = sample_color_at(point.x, point.y);
+
+        match sample {
+            Ok(rgb) => println!("Sample color: {}", rgb.to_hex()),
+            Err(message) => eprintln!("Sampleing failed : {message}"),
+        }
     }
     unsafe { CallNextHookEx(None, code, wparam, lparam) }
 }

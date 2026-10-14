@@ -27,42 +27,7 @@ impl Render for Picker {
             .p_4()
             .bg(rgb(0x202020))
             .text_color(rgb(0xffffff))
-            .child(
-                div()
-                    .w(px(64.0))
-                    .h(px(64.0))
-                    .rounded_md()
-                    .bg(rgb(preview_color)),
-            )
             .child(format!("{} | {}", self.color.to_hex(), self.color.to_rgb(),))
-            .child(
-                div()
-                    .id("change-color")
-                    .px_3()
-                    .py_2()
-                    .rounded_md()
-                    .bg(rgb(0x404040))
-                    .cursor_pointer()
-                    .child("Change color")
-                    .on_click(cx.listener(|picker, _event, _window, cx| {
-                        picker.color = Rgb { r: 0, g: 0, b: 255 };
-                        cx.notify();
-                    })),
-            )
-            .child(
-                div()
-                    .id("Copy-text")
-                    .px_3()
-                    .py_2()
-                    .rounded_md()
-                    .bg(rgb(0x404040))
-                    .cursor_pointer()
-                    .child("Copy HEX")
-                    .on_click(cx.listener(|picker, _event, _window, cx| {
-                        let text = picker.color.to_hex();
-                        cx.write_to_clipboard(ClipboardItem::new_string(text));
-                    })),
-            )
     }
 }
 
@@ -72,6 +37,7 @@ fn main() {
         Err(error) => println!("Sampling failed: {error}"),
     }
 
+    // register the hook
     let hook = match mouse_click::register_mouse_hook() {
         Ok(hook) => hook,
         Err(error) => {
@@ -99,12 +65,14 @@ fn main() {
             },
         )
         .expect("failed to open the window");
+
         cx.on_window_closed(|cx| {
             if cx.windows().is_empty() {
                 cx.quit();
             }
         })
         .detach();
+
         cx.activate(true);
     });
     if let Err(error) = mouse_click::unregister_mouse_hook(hook) {
