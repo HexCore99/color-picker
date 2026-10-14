@@ -82,3 +82,34 @@ impl Render for Picker {
 ```
 
 - get the pixel from mouse positioin (x,y) from the screen which reference is held by `dc`,
+
+```c
+WPARAM(usize) // unsigned, pointer-sized
+LPARAM(isize) // signed, pointer-sized
+LRESULT(isize) // signed, pointer-sized
+```
+
+```rust
+unsafe extern "system" fn mouse_hook(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
+}
+```
+
+- `extern` Dont use Rust default `ABI` for this function.
+- `system` enforces the system e.g(windows/linux/mac) ABI.
+- What is ABI (Application Binary Interface):
+  - `Argument Passing`: How arguments are passed to a function
+  - `Return Values`: How a function returns its result
+  - `Register & Stack management`: How the stack and registers are handled during function calls.
+  - summary: defines how the function is called.
+
+```rust
+    if code == HC_ACTION as i32 && wparam.0 == WM_LBUTTONDOWN as usize {
+        let event = lparam.0 as *const MSLLHOOKSTRUCT;
+
+        let point = unsafe { (*event).pt };
+    }
+```
+
+- `code == HC_ACTION` => tells that, this event can be processed by this hook.
+- `lparam` contains the `event` data address.
+- `MSSLHOOKSTRUCT` kind of a rust wrapper which converts the `event` to something that rust can interact

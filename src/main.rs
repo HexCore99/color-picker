@@ -4,6 +4,7 @@ use gpui::{
 };
 
 mod color;
+mod mouse_click;
 mod windows_sampling;
 use color::Rgb;
 
@@ -71,6 +72,14 @@ fn main() {
         Err(error) => println!("Sampling failed: {error}"),
     }
 
+    let hook = match mouse_click::register_mouse_hook() {
+        Ok(hook) => hook,
+        Err(error) => {
+            eprintln!("could not register mouse hook: {error}");
+            return;
+        }
+    };
+
     Application::new().run(|cx: &mut App| {
         let bounds = Bounds::centered(None, size(px(360.0), px(240.0)), cx);
 
@@ -90,6 +99,15 @@ fn main() {
             },
         )
         .expect("failed to open the window");
+        cx.on_window_closed(|cx| {
+            if cx.windows().is_empty() {
+                cx.quit();
+            }
+        })
+        .detach();
         cx.activate(true);
-    })
+    });
+    if let Err(error) = mouse_click::unregister_mouse_hook(hook) {
+        eprintln!("Could not remove mouse hook: {error}");
+    }
 }
