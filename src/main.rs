@@ -1,33 +1,20 @@
 use gpui::{
-    App, Application, Bounds, ClipboardItem, Context, Window, WindowBounds, WindowOptions, div,
-    prelude::*, px, rgb, size,
+    App, Application, Bounds, Context, Window, WindowBounds, WindowOptions, prelude::*, px, size,
 };
 
 mod color;
 mod mouse_click;
 mod windows_sampling;
 use color::Rgb;
+mod ui;
 
 struct Picker {
     color: Rgb,
 }
 
 impl Render for Picker {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let preview_color = (u32::from(self.color.r) << 16)
-            | (u32::from(self.color.g) << 8)
-            | (u32::from(self.color.b));
-
-        div()
-            .size_full()
-            .flex()
-            .flex_col()
-            .items_start()
-            .gap_3()
-            .p_4()
-            .bg(rgb(0x202020))
-            .text_color(rgb(0xffffff))
-            .child(format!("{} | {}", self.color.to_hex(), self.color.to_rgb(),))
+    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+        ui::view(&self.color)
     }
 }
 
@@ -47,7 +34,7 @@ fn main() {
     };
 
     Application::new().run(|cx: &mut App| {
-        let bounds = Bounds::centered(None, size(px(360.0), px(240.0)), cx);
+        let bounds = Bounds::centered(None, size(px(900.0), px(650.0)), cx);
 
         cx.open_window(
             WindowOptions {
