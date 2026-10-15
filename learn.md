@@ -71,6 +71,19 @@ impl Render for Picker {
 - `picker` borrows the `Picker` mutably.
 - `event` `window` `cx` is passed by `the on_click()`. And i dont know what i can do with these right now.
 
+```rust
+
+.on_click(move |_, _, cx| {
+    cx.write_to_clipboard(ClipboardItem::new_string(
+        hex_to_copy.clone(),
+    ));
+}),
+
+```
+
+- `move` passes the ownershipt of the `hex_to_copy` to the callback.
+- because when the `view()` function return, `hex_to_copy` vanishes.
+
 ## Windows Stuffs
 
 - `let dc = unsafe{GetDC(None)};` dc holds the entire screen as a reference

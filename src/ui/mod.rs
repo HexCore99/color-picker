@@ -1,5 +1,7 @@
 mod body;
+mod copy_button;
 mod header;
+mod value_row;
 
 use crate::color::Rgb;
 use gpui::{div, prelude::*, rgb};
