@@ -1,9 +1,8 @@
-use crate::color::Rgb;
-use gpui::{FontWeight, div, prelude::*, px, rgb};
+use super::{Controls, copy_button, value_row};
+use crate::{color::Rgb, ui::controls};
+use gpui::{Entity, FontWeight, div, prelude::*, px, rgb};
 
-use super::{copy_button, value_row};
-
-pub fn view(color: &Rgb) -> impl IntoElement {
+pub fn view(color: &Rgb, controls: &Entity<Controls>) -> impl IntoElement {
     let preview_color = (u32::from(color.r) << 16) | (u32::from(color.g) << 8) | u32::from(color.b);
     let (hsl_h, hsl_s, hsl_l) = color.hsl_channels();
     let (hsv_h, hsv_s, hsv_v) = color.hsv_channels();
@@ -81,6 +80,7 @@ pub fn view(color: &Rgb) -> impl IntoElement {
                                     color.to_hsv(),
                                 )),
                         ),
-                ),
+                )
+                .child(controls.clone())
         )
 }

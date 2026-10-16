@@ -1,12 +1,15 @@
 mod body;
+mod controls;
 mod copy_button;
 mod header;
 mod value_row;
 
-use crate::color::Rgb;
-use gpui::{div, prelude::*, rgb};
+pub use controls::Controls;
 
-pub fn view(color: &Rgb) -> impl IntoElement {
+use crate::color::Rgb;
+use gpui::{Entity, div, prelude::*, rgb};
+
+pub fn view(color: &Rgb, controls: &Entity<Controls>) -> impl IntoElement {
     div()
         .size_full()
         .flex()
@@ -17,5 +20,5 @@ pub fn view(color: &Rgb) -> impl IntoElement {
         .bg(rgb(0x202020))
         .text_color(rgb(0xffffff))
         .child(header::view())
-        .child(body::view(color))
+        .child(body::view(color, controls))
 }

@@ -6,6 +6,7 @@
 - `#[cfg(test)]` cfg means `configuration condition` it tells rust to include an item when condition is true. in this case `test`
 - `let value = pixel.0;` this weird shit is possible , because pixel is holding a `tuple struct`
 - `tuple struct` a struct without variable names, just the types. e.g `pub struct Point(i32,i32)`
+- `Cow` (Clone on Write) can hold borrowed or owned data. `to_mut()` clones borrowed data only when you need to change it; for example, `Cow::Borrowed(include_bytes!(...))` can pass bundled SVG bytes without making another copy.
 
 ## GPUI stuffss
 
