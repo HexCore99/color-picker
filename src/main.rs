@@ -1,6 +1,6 @@
 use gpui::{
-    App, Application, Bounds, Context, Entity, Window, WindowBounds, WindowOptions, prelude::*, px,
-    size,
+    App, Application, Bounds, Context, Entity, TitlebarOptions, Window, WindowBounds,
+    WindowOptions, prelude::*, px, size,
 };
 
 mod color;
@@ -39,7 +39,7 @@ fn main() {
     Application::new()
         .with_assets(assets::Assets)
         .run(|cx: &mut App| {
-            let bounds = Bounds::centered(None, size(px(900.0), px(650.0)), cx);
+            let bounds = Bounds::centered(None, size(px(700.0), px(450.0)), cx);
 
             cx.open_window(
                 WindowOptions {

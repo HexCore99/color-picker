@@ -1,12 +1,15 @@
 # AGENTS.md — Rust + GPUI Color Picker
 
+### Never edit my files, until i say so.
+
 ## Mission
 
 Build a **lightweight, polished, reliable desktop color picker for Windows** using **Rust and GPUI**. Windows is the only implementation target for now. Organize the code so that macOS and Linux support can be added later, but **do not implement, emulate, or claim support for those platforms yet**.
 
-This is a **learning-first project**. Codex is a mentor, reviewer, debugger, and implementation partner—not an autonomous app factory. Help the developer understand *why* the code works, make meaningful architectural decisions, and gradually become able to maintain it independently.
+This is a **learning-first project**. Codex is a mentor, reviewer, debugger, and implementation partner—not an autonomous app factory. Help the developer understand _why_ the code works, make meaningful architectural decisions, and gradually become able to maintain it independently.
 
 ### Priorities, in order
+
 1. Correct pixel sampling and predictable user interaction.
 2. Understandable, idiomatic Rust and GPUI code.
 3. Reliability, good keyboard support, and Windows integration.
@@ -23,7 +26,7 @@ Do not sacrifice correctness or maintainability merely to reach an arbitrary exe
   - **Implement / fix / refactor:** make the smallest complete, tested change that meets the request; do not stop at pseudocode.
   - **Guide me:** break the task into manageable steps, give the developer a chance to attempt meaningful work, and offer hints before a full solution when appropriate.
 - For a substantial new feature, start with: **(1) what we are building, (2) the Rust/GPUI/Windows concepts involved, (3) a short plan, (4) how we will verify it**. Then implement if authorized.
-- Explain *non-obvious* details: ownership/borrowing, lifetimes where relevant, `Entity` and `Context`, events/actions, asynchronous work, rendering vs state, and the purpose of Windows API calls.
+- Explain _non-obvious_ details: ownership/borrowing, lifetimes where relevant, `Entity` and `Context`, events/actions, asynchronous work, rendering vs state, and the purpose of Windows API calls.
 - Keep explanations proportional to the task. Do not produce lectures for trivial edits. Prefer plain English, then precise Rust terminology.
 - Present real alternatives briefly when they matter, then recommend one and explain the trade-off.
 - When debugging, identify the root cause and evidence rather than repeatedly trying random changes.
@@ -41,6 +44,7 @@ Do not sacrifice correctness or maintainability merely to reach an arbitrary exe
 - **Tests:** standard Rust unit/integration tests and GPUI test support where practical. Real screen, hotkey, tray, and DPI behavior require manual Windows validation.
 
 **GPUI is pre-1.0 and changes frequently.** Before writing examples or modifying GPUI integration:
+
 1. Inspect `Cargo.toml`, `Cargo.lock`, the installed crate version, and the actual code in this repo.
 2. Consult the matching upstream GPUI README/examples/source if an API is uncertain.
 3. Use **compatible pinned dependency versions or an intentional Git revision**—never wildcard `*` or an unpinned `main` for this project.
@@ -52,6 +56,7 @@ Windows environment may require Rust/MSVC build tools, the Windows SDK, CMake, a
 ## Product scope
 
 ### Essential features (must work before calling the app complete)
+
 - Global keyboard shortcut to enter picking mode; graceful handling if the shortcut is already taken.
 - Select a visible desktop pixel with the mouse; **left-click confirms, Escape cancels**.
 - Live color preview and a **pixel-accurate zoomed magnifier** with a clear center-pixel indicator.
@@ -64,6 +69,7 @@ Windows environment may require Rust/MSVC build tools, the Windows SDK, CMake, a
 - Errors are handled visibly where appropriate; no panics during ordinary user actions.
 
 ### Polish after the essentials
+
 - Configurable shortcut and preferred output format.
 - Local persistence for settings/history; predictable behavior if the settings file is missing or corrupted.
 - Customizable copy formats (e.g. HSV or CSS notation) only after HEX/RGB/HSL are correct.
@@ -71,6 +77,7 @@ Windows environment may require Rust/MSVC build tools, the Windows SDK, CMake, a
 - Portable release packaging, app icon, version information, and a concise user README.
 
 ### Explicitly out of scope for the first release
+
 - macOS/Linux implementations; cloud accounts/sync; analytics or telemetry; network services; an embedded browser; plugin architectures; auto-update frameworks; installer frameworks unless requested; advanced palette extraction; design-token export.
 - Promising perfect HDR, wide-gamut, ICC color-profile, DRM-protected, or exclusive-fullscreen sampling without separate investigation and validation.
 
@@ -122,18 +129,18 @@ src/
 
 Treat these as checkpoints, not authorization to implement the entire roadmap automatically.
 
-| Stage | Deliverable | Learn | Acceptance gate |
-| --- | --- | --- | --- |
-| 0. Environment | Minimal GPUI window launches on Windows | Cargo, MSVC, GPUI `Application`, `Entity`, `Render` | `cargo run` works locally; version/toolchain recorded |
-| 1. Color domain | RGB type, HEX/RGB/HSL formatting + tests | structs, enums, conversions, `Result`, unit tests | Black, white, primaries, boundary/rounding cases pass |
-| 2. Static UI | Clean color preview and selectable copy format | GPUI elements, state, actions, focus | UI renders and responds without capture |
-| 3. Sampling | Read pixel under cursor with a temporary test UI | FFI boundaries, handles, Win32 GDI, coordinate spaces | Matches known test colors on real Windows desktop |
-| 4. Picking workflow | Activate, track cursor, click to accept, Esc to cancel | state machines, windows, events, lifecycle | Works from another application without focus bugs |
-| 5. Magnifier | Smooth nearest-neighbor zoom and central pixel marker | region capture, image buffers, performance | No blur, off-by-one errors, or overlay self-capture |
-| 6. Clipboard/history | Copy formats and maintain recent colors | serialization, state, data flow | Copies correct strings; history ordering/dedup works |
-| 7. Background use | Global hotkey, tray, reopen/quit | native event loops, resource cleanup | Shortcut conflicts handled; Quit releases resources |
-| 8. Settings/polish | Persistent preferences and accessible UI | configuration, error handling, UX | Restart preserves valid settings; corrupt config recovers |
-| 9. Release QA | Portable release and documented limitations | profiling, packaging, DPI/display testing | Checklist passes and size/RAM/startup measured |
+| Stage                | Deliverable                                            | Learn                                                 | Acceptance gate                                           |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------------------- | --------------------------------------------------------- |
+| 0. Environment       | Minimal GPUI window launches on Windows                | Cargo, MSVC, GPUI `Application`, `Entity`, `Render`   | `cargo run` works locally; version/toolchain recorded     |
+| 1. Color domain      | RGB type, HEX/RGB/HSL formatting + tests               | structs, enums, conversions, `Result`, unit tests     | Black, white, primaries, boundary/rounding cases pass     |
+| 2. Static UI         | Clean color preview and selectable copy format         | GPUI elements, state, actions, focus                  | UI renders and responds without capture                   |
+| 3. Sampling          | Read pixel under cursor with a temporary test UI       | FFI boundaries, handles, Win32 GDI, coordinate spaces | Matches known test colors on real Windows desktop         |
+| 4. Picking workflow  | Activate, track cursor, click to accept, Esc to cancel | state machines, windows, events, lifecycle            | Works from another application without focus bugs         |
+| 5. Magnifier         | Smooth nearest-neighbor zoom and central pixel marker  | region capture, image buffers, performance            | No blur, off-by-one errors, or overlay self-capture       |
+| 6. Clipboard/history | Copy formats and maintain recent colors                | serialization, state, data flow                       | Copies correct strings; history ordering/dedup works      |
+| 7. Background use    | Global hotkey, tray, reopen/quit                       | native event loops, resource cleanup                  | Shortcut conflicts handled; Quit releases resources       |
+| 8. Settings/polish   | Persistent preferences and accessible UI               | configuration, error handling, UX                     | Restart preserves valid settings; corrupt config recovers |
+| 9. Release QA        | Portable release and documented limitations            | profiling, packaging, DPI/display testing             | Checklist passes and size/RAM/startup measured            |
 
 **For each stage:** provide a concise explanation, the smallest running demonstration, tests/manual checks, and the next learning exercise. Do not move to the next stage until the current stage works or the developer explicitly redirects the work.
 
@@ -151,6 +158,7 @@ cargo check
 For a release or performance change, also use `cargo build --release` and inspect the actual release artifact. If a command cannot run, state **exactly why** and what the developer should execute on Windows; do not claim success by inference. Do not silently add Clippy suppressions or disable tests just to make CI green.
 
 Minimum manual Windows checklist as features become available:
+
 - Picking from other apps; left-click confirm; Escape cancel; clipboard contents.
 - 100%, 125%, 150%, 200% scaling; moving between differently scaled displays.
 - Secondary monitor on the left or above the primary; edges/corners and taskbar.

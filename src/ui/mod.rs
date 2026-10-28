@@ -2,6 +2,7 @@ mod body;
 mod controls;
 mod copy_button;
 mod header;
+mod slider;
 mod value_row;
 
 pub use controls::Controls;
