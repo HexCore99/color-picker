@@ -1,6 +1,6 @@
 use gpui::{
-    App, Application, Bounds, Context, Entity, TitlebarOptions, Window, WindowBounds,
-    WindowOptions, prelude::*, px, size,
+    App, Application, Bounds, Context, Entity, Window, WindowBounds, WindowOptions, prelude::*, px,
+    size,
 };
 
 mod color;
@@ -13,11 +13,12 @@ mod ui;
 struct Picker {
     color: Rgb,
     controls: Entity<ui::Controls>,
+    slider: Entity<ui::Slider>,
 }
 
 impl Render for Picker {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        ui::view(&self.color, &self.controls)
+        ui::view(&self.color, &self.controls, &self.slider)
     }
 }
 
@@ -54,6 +55,7 @@ fn main() {
                             b: 0,
                         },
                         controls: picker_context.new(|_| ui::Controls::default()),
+                        slider: picker_context.new(|_| ui::Slider::default()),
                     })
                 },
             )

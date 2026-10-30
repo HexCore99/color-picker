@@ -11,6 +11,13 @@ pub struct Slider {
     drag_start: Option<(Pixels, u8)>,
 }
 
+struct SliderDrag;
+impl Render for SliderDrag {
+    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+        div()
+    }
+}
+
 impl Default for Slider {
     fn default() -> Self {
         Self {
@@ -39,6 +46,21 @@ impl Render for Slider {
                     .w(px(self.track_width))
                     .h(px(self.thumb_size))
                     .flex_shrink_0()
+                    .on_drag_move(cx.listener(
+                        |slider, event: &DragMoveEvent<SliderDrag>, _, cx| {
+                            if let Some((starting_mouse_x, starting_value)) = slider.drag_start {
+                                let distance =
+                                    (event.event.position.x - starting_mouse_x) / px(1.0);
+
+                                let travel = slider.track_width - slider.thumb_size;
+
+                                let value = f32::from(starting_value) + (distance / travel) * 255.0;
+
+                                slider.val_x = value.clamp(0.0, 255.0).round() as u8;
+                                cx.notify();
+                            }
+                        },
+                    ))
                     .child(
                         div() // Gray track
                             .absolute()
@@ -69,22 +91,22 @@ impl Render for Slider {
                             .bg(rgb(0xffffff))
                             .on_mouse_down(
                                 MouseButton::Left,
-                                cx.listener(|slider,event:&MouseDownEvent,_,_|{
-                                    slider.drag_start = Some((event.position.x,slider.val_x));
-                                }) ,
-                    )
-                    .on_drag(SliderDrag, |_,_,_,cx| cx.new(|_|SliderDrag))
-                /*
-                on_click(
-                on_push_down_over_slider,
-                get the initial pos x = 0(assuimng)
-                continuosly read the x pos of the mouse pointer,
-                then adding it to the initial x until 255.
-                if it crosses 255 values, dont add.
-                )
+                                cx.listener(|slider, event: &MouseDownEvent, _, _| {
+                                    slider.drag_start = Some((event.position.x, slider.val_x));
+                                }),
+                            )
+                            .on_drag(SliderDrag, |_, _, _, cx| cx.new(|_| SliderDrag)),
+                    ), /*
+                       on_click(
+                       on_push_down_over_slider,
+                       get the initial pos x = 0(assuimng)
+                       continuosly read the x pos of the mouse pointer,
+                       then adding it to the initial x until 255.
+                       if it crosses 255 values, dont add.
+                       )
 
 
-                 */
+                        */
             )
             .child(
                 div() // Slider Value Label

@@ -6,11 +6,12 @@ mod slider;
 mod value_row;
 
 pub use controls::Controls;
+pub use slider::Slider;
 
 use crate::color::Rgb;
 use gpui::{Entity, div, prelude::*, rgb};
 
-pub fn view(color: &Rgb, controls: &Entity<Controls>) -> impl IntoElement {
+pub fn view(color: &Rgb, controls: &Entity<Controls>, slider: &Entity<Slider>) -> impl IntoElement {
     div()
         .size_full()
         .flex()
@@ -21,5 +22,5 @@ pub fn view(color: &Rgb, controls: &Entity<Controls>) -> impl IntoElement {
         .bg(rgb(0x202020))
         .text_color(rgb(0xffffff))
         .child(header::view())
-        .child(body::view(color, controls))
+        .child(body::view(color, controls, slider))
 }
