@@ -2,7 +2,13 @@ use super::{Controls, copy_button, value_row};
 use crate::{color::Rgb, ui::slider::Slider};
 use gpui::{Entity, FontWeight, div, prelude::*, px, rgb};
 
-pub fn view(color: &Rgb, controls: &Entity<Controls>, slider: &Entity<Slider>) -> impl IntoElement {
+pub fn view(
+    color: &Rgb,
+    controls: &Entity<Controls>,
+    red_slider: &Entity<Slider>,
+    green_slider: &Entity<Slider>,
+    blue_slider: &Entity<Slider>,
+) -> impl IntoElement {
     let preview_color = (u32::from(color.r) << 16) | (u32::from(color.g) << 8) | u32::from(color.b);
     let (hsl_h, hsl_s, hsl_l) = color.hsl_channels();
     let (hsv_h, hsv_s, hsv_v) = color.hsv_channels();
@@ -27,10 +33,16 @@ pub fn view(color: &Rgb, controls: &Entity<Controls>, slider: &Entity<Slider>) -
                         .rounded_lg()
                         .bg(rgb(preview_color)),
                 )
-                .child(div()
+                .child(div() // Color Slider
                     .w_full()
                     .pt_10()
-                    .child(slider.clone())
+                    .flex()
+                    .flex_col()
+                    .gap_2()
+
+                    .child(red_slider.clone())
+                    .child(green_slider.clone())
+                    .child(blue_slider.clone())
                 )
         )
         .child(

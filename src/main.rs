@@ -3,22 +3,31 @@ use gpui::{
     size,
 };
 
+use color::Rgb;
+
+mod assets;
 mod color;
 mod mouse_click;
-mod windows_sampling;
-use color::Rgb;
-mod assets;
 mod ui;
+mod windows_sampling;
 
 struct Picker {
     color: Rgb,
     controls: Entity<ui::Controls>,
-    slider: Entity<ui::Slider>,
+    red_slider: Entity<ui::Slider>,
+    green_slider: Entity<ui::Slider>,
+    blue_slider: Entity<ui::Slider>,
 }
 
 impl Render for Picker {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        ui::view(&self.color, &self.controls, &self.slider)
+        ui::view(
+            &self.color,
+            &self.controls,
+            &self.red_slider,
+            &self.green_slider,
+            &self.blue_slider,
+        )
     }
 }
 
@@ -55,7 +64,14 @@ fn main() {
                             b: 0,
                         },
                         controls: picker_context.new(|_| ui::Controls::default()),
-                        slider: picker_context.new(|_| ui::Slider::default()),
+                        red_slider: picker_context
+                            .new(|_| ui::Slider::new().fill_color(ui::SliderColor::Red)),
+
+                        green_slider: picker_context
+                            .new(|_| ui::Slider::new().fill_color(ui::SliderColor::Green)),
+
+                        blue_slider: picker_context
+                            .new(|_| ui::Slider::new().fill_color(ui::SliderColor::Blue)),
                     })
                 },
             )
