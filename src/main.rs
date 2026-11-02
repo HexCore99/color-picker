@@ -1,11 +1,9 @@
 use gpui::{
-    App, Application, Bounds, Context, Entity, Window, WindowBounds, WindowOptions, prelude::*, px,
-    size,
+    App, Application, Bounds, Context, Entity, TitlebarOptions, Window, WindowBounds,
+    WindowOptions, prelude::*, px, size,
 };
 
 use color::Rgb;
-
-use crate::ui::Slider;
 
 mod assets;
 mod color;
@@ -55,11 +53,16 @@ fn main() {
     Application::new()
         .with_assets(assets::Assets)
         .run(move |cx: &mut App| {
-            let bounds = Bounds::centered(None, size(px(700.0), px(450.0)), cx);
+            let bounds = Bounds::centered(None, size(px(700.0), px(380.0)), cx);
 
             cx.open_window(
                 WindowOptions {
                     window_bounds: Some(WindowBounds::Windowed(bounds)),
+                    titlebar: Some(TitlebarOptions {
+                        title: Some("Color Picker".into()),
+                        appears_transparent: true,
+                        ..Default::default()
+                    }),
                     ..Default::default()
                 },
                 move |_, cx| {
