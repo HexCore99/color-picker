@@ -5,6 +5,8 @@ use gpui::{
 
 use color::Rgb;
 
+use crate::ui::Slider;
+
 mod assets;
 mod color;
 mod mouse_click;
@@ -103,6 +105,21 @@ fn main() {
                                     let result = picker_entity.update(cx, |picker, cx| {
                                         picker.color = color;
                                         cx.notify();
+
+                                        picker.red_slider.update(cx, |slider, cx| {
+                                            slider.set_slider_value(color.r);
+                                            cx.notify();
+                                        });
+
+                                        picker.green_slider.update(cx, |slider, cx| {
+                                            slider.set_slider_value(color.g);
+                                            cx.notify();
+                                        });
+
+                                        picker.blue_slider.update(cx, |slider, cx| {
+                                            slider.set_slider_value(color.b);
+                                            cx.notify();
+                                        });
                                     });
                                     if result.is_err() {
                                         break;

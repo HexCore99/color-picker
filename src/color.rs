@@ -1,3 +1,4 @@
+#[derive(Clone, Copy)]
 pub struct Rgb {
     pub r: u8,
     pub g: u8,

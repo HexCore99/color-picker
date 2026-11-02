@@ -78,6 +78,9 @@ impl Slider {
     pub fn current_value(&self) -> u8 {
         self.val_x
     }
+    pub fn set_slider_value(&mut self, val: u8) {
+        self.val_x = val;
+    }
 }
 
 impl Render for Slider {
