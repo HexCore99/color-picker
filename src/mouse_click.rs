@@ -7,7 +7,13 @@ use windows::Win32::UI::WindowsAndMessaging::{
     UnhookWindowsHookEx, WH_MOUSE_LL, WM_LBUTTONDOWN, WindowFromPoint,
 };
 
+use crate::color::Rgb;
+use async_channel::{Receiver, Sender};
+use std::sync::OnceLock;
+
+// AtomicBool - safely read/change values across different threads
 static PICKING: AtomicBool = AtomicBool::new(false);
+static COLOR_SENDER: OnceLock<Sender<Rgb>> = OnceLock::new();
 
 pub fn start_picking() {
     PICKING.store(true, Ordering::Relaxed);
@@ -15,6 +21,17 @@ pub fn start_picking() {
 
 pub fn cancel_picking() {
     PICKING.store(false, Ordering::Relaxed);
+}
+pub fn current_picking_state() -> bool {
+    PICKING.load(Ordering::Relaxed)
+}
+
+pub fn create_color_channel() -> Result<Receiver<Rgb>, &'static str> {
+    let (sender, receiver) = async_channel::unbounded::<Rgb>(); //unbound -> A channel has a queue: it holds sent values until the receiver takes them.
+    COLOR_SENDER
+        .set(sender)
+        .map_err(|_| "color channel already initialized")?;
+    Ok(receiver)
 }
 
 unsafe extern "system" fn mouse_hook(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
@@ -35,9 +52,15 @@ unsafe extern "system" fn mouse_hook(code: i32, wparam: WPARAM, lparam: LPARAM) 
 
         //Ignore our ap so clicking Cancel doesnt sample the Picker button.
 
-        if process_id != std::process::id() && PICKING.swap(false, Ordering::Relaxed) {
+        if process_id != std::process::id() && PICKING.load(Ordering::Relaxed) {
             match sample_color_at(point.x, point.y) {
-                Ok(color) => println!("Picked color: {}", color.to_hex()),
+                Ok(color) => match COLOR_SENDER.get() {
+                    Some(sender) => match sender.try_send(color) {
+                        Ok(()) => {}
+                        Err(error) => eprintln!("Could not send color: {error}"),
+                    },
+                    None => {}
+                },
                 Err(error) => eprintln!("Sampling failed: {error}"),
             }
         }

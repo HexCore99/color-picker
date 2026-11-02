@@ -74,6 +74,10 @@ impl Slider {
         self.val_x = value;
         self
     }
+
+    pub fn current_value(&self) -> u8 {
+        self.val_x
+    }
 }
 
 impl Render for Slider {

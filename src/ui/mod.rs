@@ -1,19 +1,18 @@
 mod body;
-mod controls;
 mod copy_button;
 mod header;
+mod pick_button;
 mod slider;
 mod value_row;
 
-pub use controls::Controls;
 pub use slider::{Slider, SliderColor};
 
-use crate::color::Rgb;
+use crate::{Picker, color::Rgb};
 use gpui::{Entity, div, prelude::*, rgb};
 
 pub fn view(
     color: &Rgb,
-    controls: &Entity<Controls>,
+    cx: &mut Context<Picker>,
 
     red_slider: &Entity<Slider>,
     green_slider: &Entity<Slider>,
@@ -29,11 +28,5 @@ pub fn view(
         .bg(rgb(0x202020))
         .text_color(rgb(0xffffff))
         .child(header::view())
-        .child(body::view(
-            color,
-            controls,
-            red_slider,
-            green_slider,
-            blue_slider,
-        ))
+        .child(body::view(color, cx, red_slider, green_slider, blue_slider))
 }

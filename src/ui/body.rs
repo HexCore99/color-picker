@@ -1,10 +1,14 @@
-use super::{Controls, copy_button, value_row};
-use crate::{color::Rgb, ui::slider::Slider};
+use super::{copy_button, value_row};
+use crate::{
+    Picker,
+    color::Rgb,
+    ui::{pick_button, slider::Slider},
+};
 use gpui::{Entity, FontWeight, div, prelude::*, px, rgb};
 
 pub fn view(
     color: &Rgb,
-    controls: &Entity<Controls>,
+    cx: &mut Context<Picker>,
     red_slider: &Entity<Slider>,
     green_slider: &Entity<Slider>,
     blue_slider: &Entity<Slider>,
@@ -100,6 +104,6 @@ pub fn view(
                                 )),
                         ),
                 )
-                .child(controls.clone())
+                .child(pick_button::view(cx))
         )
 }

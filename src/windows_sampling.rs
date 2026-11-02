@@ -1,31 +1,30 @@
 use crate::color::Rgb;
 use windows::Win32::Graphics::Gdi::{CLR_INVALID, GetDC, GetPixel, ReleaseDC};
-use windows::{
-    Win32::{Foundation::POINT, UI::WindowsAndMessaging::GetCursorPos},
-    core::Result,
-};
 
+// use windows::{
+//     Win32::{Foundation::POINT, UI::WindowsAndMessaging::GetCursorPos},
+//     core::Result,
+// };
 
-pub fn cursor_position() -> Result<(i32, i32)> {
-    // this is windows Result return type.
-    let mut position = POINT::default(); // sets the default value as (0,0)
-
-    unsafe {
-        GetCursorPos(&mut position)?; // if this function call fails, ? returns the error
-    }
-
-    Ok((position.x, position.y))
-}
-
-
-pub fn sample_cursor_color() -> std::result::Result<Rgb, String> {
-    let (x, y) =
-        cursor_position().map_err(|err| format!("could not read teh cursor position: {err}"))?;
-    sample_color_at(x, y)
-}
+// pub fn cursor_position() -> Result<(i32, i32)> {
+//     // this is windows Result return type.
+//     let mut position = POINT::default(); // sets the default value as (0,0)
+//
+//     unsafe {
+//         GetCursorPos(&mut position)?; // if this function call fails, ? returns the error
+//     }
+//
+//     Ok((position.x, position.y))
+// }
+//
+// pub fn sample_cursor_color() -> std::result::Result<Rgb, String> {
+//     let (x, y) =
+//         cursor_position().map_err(|err| format!("could not read teh cursor position: {err}"))?;
+//     sample_color_at(x, y)
+// }
 
 pub fn sample_color_at(x: i32, y: i32) -> std::result::Result<Rgb, String> {
-    let dc = unsafe { GetDC(None) };
+    let dc = unsafe { GetDC(None) }; //provides access to the Whole Screen
 
     if dc.is_invalid() {
         return Err("Could not acquire the desktop device contest".into());
