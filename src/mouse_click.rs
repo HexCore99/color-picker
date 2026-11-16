@@ -63,6 +63,7 @@ unsafe extern "system" fn mouse_hook(code: i32, wparam: WPARAM, lparam: LPARAM) 
                 },
                 Err(error) => eprintln!("Sampling failed: {error}"),
             }
+            return LRESULT(1);
         }
     }
     unsafe { CallNextHookEx(None, code, wparam, lparam) }

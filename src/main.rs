@@ -1,3 +1,5 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 use gpui::{
     App, Application, Bounds, Context, Entity, TitlebarOptions, Window, WindowBounds,
     WindowOptions, prelude::*, px, size,
