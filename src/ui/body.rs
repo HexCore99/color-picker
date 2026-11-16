@@ -19,6 +19,7 @@ pub fn view(
 
     div()
         .w_full()
+        .flex_1()
         .flex()
         .gap_3()
         .child(
@@ -26,7 +27,7 @@ pub fn view(
                 .flex_1()
                 .pt(px(5.0))
                 .px(px(4.0)) // 5px left-right pad
-                .h(px(300.0))
+                .h_full()
                 .rounded_lg()
                 .bg(rgb(0x292d30))
                 .child(
@@ -52,7 +53,7 @@ pub fn view(
         .child(
             div() // Right section (color values)
                 .flex_1()
-                .h(px(300.0))
+                .h_full()
                 .flex()
                 .flex_col()
                 .gap_3()

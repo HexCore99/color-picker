@@ -9,6 +9,7 @@ mod assets;
 mod color;
 mod mouse_click;
 mod ui;
+mod window_pinning;
 mod windows_sampling;
 
 struct Picker {

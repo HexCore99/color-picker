@@ -24,7 +24,6 @@ pub fn view(
         .flex_col()
         .items_start()
         .gap_3()
-        .p_4()
         .bg(rgb(0x202020))
         .text_color(rgb(0xffffff))
         .child(header::view())

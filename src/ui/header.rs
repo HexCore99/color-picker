@@ -3,6 +3,7 @@ use std::sync::atomic::{
     Ordering::{self},
 };
 
+use crate::window_pinning::pin_window;
 use gpui::{WindowControlArea, div, prelude::*, px, rgb, svg};
 
 static PIN: AtomicBool = AtomicBool::new(false);
@@ -43,8 +44,15 @@ pub fn view() -> impl IntoElement {
                         .text_color(rgb(0xffffff)),
                 )
                 .on_click(|_, window, _| {
-                    PIN.fetch_xor(true, Ordering::Relaxed);
-                    window.refresh();
+                    let pinned = !PIN.load(Ordering::Relaxed);
+
+                    match pin_window(window, pinned) {
+                        Ok(()) => {
+                            PIN.store(pinned, Ordering::Relaxed);
+                            window.refresh();
+                        }
+                        Err(error) => eprintln!("Pinning failed: {error}"),
+                    }
                 }),
         )
         .child(
